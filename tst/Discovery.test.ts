@@ -30,7 +30,7 @@ import * as IOKit from 'tsl-apple-iokit';
  * */
 
 
-test( 'Test Discovery.newUSBDevice', async ( assert: test.Assert ): Promise<void> => {
+test( 'Test Discovery.newUSBDevices', async ( assert: test.Assert ): Promise<void> => {
 
     console.log( 'Attach a USB device to continue...' );
 

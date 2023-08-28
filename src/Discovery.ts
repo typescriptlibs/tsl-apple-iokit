@@ -99,8 +99,6 @@ export namespace Discovery {
                 }
             };
 
-            check();
-
             if ( timeout ) {
                 timeoutTimer = setTimeout(
                     (): void => {
@@ -110,6 +108,9 @@ export namespace Discovery {
                     Math.max( interval, timeout )
                 );
             }
+
+            check();
+
         } );
     }
 
