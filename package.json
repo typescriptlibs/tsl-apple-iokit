@@ -1,0 +1,40 @@
+{
+    "private": true,
+    "author": "TypeScriptLibs and Contributers",
+    "description": "TypeScript Library for Apple I/O Kit",
+    "license": "MIT",
+    "name": "tsl-apple-iokit",
+    "type": "module",
+    "version": "0.1.0",
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
+    "bugs": "https://github.com/typescriptlibs/tsl-apple-iokit/issues",
+    "homepage": "https://typescriptlibs.org/tsl-apple-iokit/",
+    "repository": "https://github.com/typescriptlibs/tsl-apple-iokit.git",
+    "devDependencies": {
+        "@types/node": "~18.6.0",
+        "@typescriptlibs/tst": "^0.1.0",
+        "husky": "~8.0.3",
+        "tsl-apple-iokit": "./",
+        "typescript": "~5.2.2"
+    },
+    "engines": {
+        "node": ">=18.6.0"
+    },
+    "files": [
+        "lib/",
+        "LICENSE.md",
+        "README.md"
+    ],
+    "keywords": [
+        "Apple",
+        "IOKit",
+        "TypeScript"
+    ],
+    "scripts": {
+        "build": "npm run clean && tsc -p src/",
+        "clean": "rm -rf lib/ tst-run/",
+        "test": "npm run build && npx tst --verbose tst/",
+        "watch": "npm run build -- --watch"
+    }
+}

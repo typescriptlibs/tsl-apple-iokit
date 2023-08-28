@@ -1,0 +1,12 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "../tst-run",
+        "rootDir": "./",
+        "paths": {
+            "tsl-apple-iokit/*": [
+                "../src/*"
+            ]
+        }
+    }
+}
