@@ -30,7 +30,6 @@ export declare namespace Registry {
         objectName?: string;
         propertyKey?: string;
         plane?: (Plane | string);
-        subtrees?: boolean;
     }
     interface Root extends Record<string, unknown> {
         IOObjectClass: string;
@@ -39,11 +38,7 @@ export declare namespace Registry {
         IORegistryEntryID: number;
         IORegistryEntryName: string;
     }
-    function load(options: LoadOptions & {
-        subtrees: true;
-    }): Promise<Array<Entry>>;
-    function load(options: LoadOptions & {
-        subtrees?: false;
-    }): Promise<Root>;
+    function load(options: LoadOptions): Promise<Root>;
+    function loadSubtrees(options: LoadOptions): Promise<Array<Entry>>;
 }
 export default Registry;

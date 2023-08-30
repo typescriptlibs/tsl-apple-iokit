@@ -16,5 +16,3 @@ export * from './Discovery.js';
 export * from './Plane.js';
 
 export * from './Registry.js';
-
-export * from './Shell.js';

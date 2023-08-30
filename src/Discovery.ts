@@ -59,26 +59,38 @@ export namespace Discovery {
     }
 
 
-    export function newUSBDevices (
+    export function newEntry (
+        objectClass?: string,
+        propertyKey?: string,
+        plane: Plane = Plane.Service,
         interval: number = 1000,
-        timeout: number = 60000
+        timeout: number = 60000,
+        knownEntries: Array<Registry.Entry> = []
     ): Promise<Array<Registry.Entry>> {
+        const loadOptions: ( Registry.LoadOptions & { subtrees: true } ) = {
+            allProperties: true,
+            plane: plane,
+            subtrees: true
+        };
+
+        if ( objectClass ) {
+            loadOptions.objectClass = objectClass;
+        }
+
+        if ( propertyKey ) {
+            loadOptions.propertyKey = propertyKey;
+        }
+
         return new Promise( ( resolve, reject ): void => {
-            let pastDevices: Array<Registry.Entry> = [];
             let timer: ( NodeJS.Timeout | number ) = NaN;
             let timeoutTimer: ( NodeJS.Timeout | number ) = NaN;
 
             const check = async (): Promise<void> => {
                 try {
-                    const nowDevices = await Registry.load( {
-                        allProperties: true,
-                        plane: Plane.USB,
-                        propertyKey: 'sessionID',
-                        subtrees: true,
-                    } );
+                    const nowDevices = await Registry.loadSubtrees( loadOptions );
 
                     if ( timer ) {
-                        const newDevices = diff( 'sessionID', pastDevices, nowDevices );
+                        const newDevices = diff( 'sessionID', knownEntries, nowDevices );
 
                         if ( newDevices.length ) {
                             clearTimeout( timeoutTimer );
@@ -87,8 +99,8 @@ export namespace Discovery {
                         }
                     }
 
-                    if ( pastDevices.length !== nowDevices.length ) {
-                        pastDevices = nowDevices;
+                    if ( knownEntries.length !== nowDevices.length ) {
+                        knownEntries = nowDevices;
                     }
 
                     timer = setTimeout( check, interval );
@@ -112,6 +124,15 @@ export namespace Discovery {
             check();
 
         } );
+    }
+
+
+    export function newUSBDevices (
+        interval: number = 1000,
+        timeout: number = 60000,
+        knownEntries: Array<Registry.Entry> = []
+    ): Promise<Array<Registry.Entry>> {
+        return newEntry( undefined, 'sessionID', Plane.USB, interval, timeout, knownEntries );
     }
 
 
