@@ -46,9 +46,41 @@ interface PipedCommand {
 
 /* *
  *
+ *  Constants
+ *
+ * */
+
+
+const quoteRegExp = /"+/g;
+
+const quotesRegExp = /^"[^"]*"$/g;
+
+const spaceRegExp = /\s+/g;
+
+
+/* *
+ *
  *  Functions
  *
  * */
+
+
+function escapeArgs (
+    args: ReadonlyArray<string>
+): ReadonlyArray<string> {
+    const escapedArgs = args.slice();
+
+    for ( let i = 0, iEnd = escapedArgs.length; i < iEnd; ++i ) {
+        if (
+            escapedArgs[i].match( spaceRegExp ) &&
+            !escapedArgs[i].match( quotesRegExp )
+        ) {
+            escapedArgs[i] = `"${escapedArgs[i].replace( quoteRegExp, '' )}"`
+        }
+    }
+
+    return escapedArgs;
+}
 
 
 function ioregArgs (
@@ -108,7 +140,7 @@ function pipe (
         for ( const pipe of pipes ) {
             const previousPipe = spawned;
 
-            spawned = ChildProcess.spawn( pipe.command, pipe.args, options );
+            spawned = ChildProcess.spawn( pipe.command, escapeArgs( pipe.args ), options );
 
             if ( previousPipe ) {
                 const nextPipe = spawned;
